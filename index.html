@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Fleuré — ورد وهدايا وبراويز هاند ميد">
+  <title>Fleuré | Handmade with Love</title>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Tahoma, sans-serif;
+      background: #fffafc;
+      color: #392c32;
+      line-height: 1.8;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      background: #8f3d5d;
+      color: white;
+      text-align: center;
+      padding: 8px 15px;
+      font-size: 14px;
+    }
+
+    /* HEADER */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 250, 252, 0.96);
+      border-bottom: 1px solid #eadce2;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav {
+      min-height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      width: 62px;
+      height: 62px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #d9a5b7;
+    }
+
+    .navlinks {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .navlinks a {
+      color: #513841;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .navlinks a:hover {
+      color: #a64c70;
+    }
+
+    .menu {
+      display: none;
+      border: 0;
+      background: transparent;
+      font-size: 28px;
+      cursor: pointer;
+      color: #8f3d5d;
+    }
+
+    /* BUTTONS */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 20px;
+      border-radius: 999px;
+      border: 1px solid #c98ca4;
+      color: #8f3d5d;
+      background: white;
+      cursor: pointer;
+      transition: 0.25s;
+      font-weight: bold;
+    }
+
+    .pill:hover {
+      transform: translateY(-2px);
+    }
+
+    .pill.primary {
+      background: #8f3d5d;
+      color: white;
+      border-color: #8f3d5d;
+    }
+
+    .pill.soft {
+      background: #f9eaf0;
+      border-color: #f1d1dc;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 620px;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      align-items: center;
+      gap: 60px;
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+
+    .heroContent {
+      order: 1;
+    }
+
+    .heroLogo {
+      order: 2;
+      width: 100%;
+      max-width: 420px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 35px;
+      box-shadow: 0 25px 60px rgba(91, 44, 62, 0.18);
+      border: 8px solid white;
+    }
+
+    .kicker {
+      display: inline-block;
+      color: #a64c70;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .hero h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(55px, 9vw, 95px);
+      color: #8f3d5d;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .hero h2 {
+      font-size: clamp(25px, 4vw, 42px);
+      color: #4a343c;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      max-width: 650px;
+      font-size: 18px;
+      color: #695961;
+      margin-bottom: 25px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 80px 0;
+    }
+
+    .sectionHead {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .sectionHead h2 {
+      font-size: 38px;
+      color: #49323b;
+      margin-bottom: 8px;
+    }
+
+    .sectionHead p {
+      color: #75656c;
+    }
+
+    /* CATEGORIES */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+    }
+
+    .category {
+      background: white;
+      border: 1px solid #eadde2;
+      border-radius: 22px;
+      padding: 25px 15px;
+      text-align: center;
+      transition: 0.25s;
+      box-shadow: 0 8px 25px rgba(70, 35, 48, 0.05);
+    }
+
+    .category:hover {
+      transform: translateY(-5px);
+      border-color: #d59aae;
+      box-shadow: 0 15px 30px rgba(70, 35, 48, 0.1);
+    }
+
+    .categoryIcon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .category strong {
+      display: block;
+      color: #50343e;
+      margin-bottom: 5px;
+    }
+
+    .category span {
+      color: #88777e;
+      font-size: 13px;
+    }
+
+    /* FILTERS */
+    .filters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .filter {
+      border: 1px solid #e2cbd4;
+      background: white;
+      color: #704656;
+      padding: 9px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .filter:hover,
+    .filter.active {
+      background: #8f3d5d;
+      color: white;
+      border-color: #8f3d5d;
+    }
+
+    /* PRODUCTS */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .product {
+      background: white;
+      border: 1px solid #eadde2;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(60, 30, 42, 0.06);
+      transition: 0.25s;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 35px rgba(60, 30, 42, 0.11);
+    }
+
+    .productImage {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      display: block;
+      background: #f7edf1;
+    }
+
+    .productBody {
+      padding: 20px;
+    }
+
+    .productCategory {
+      display: inline-block;
+      background: #f9e9ef;
+      color: #914461;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .product h3 {
+      color: #49323b;
+      font-size: 21px;
+      margin-bottom: 7px;
+    }
+
+    .productDescription {
+      color: #76666c;
+      font-size: 14px;
+      min-height: 50px;
+      margin-bottom: 12px;
+    }
+
+    .productBottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .price {
+      color: #8f3d5d;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .whatsapp {
+      background: #25D366;
+      color: white;
+      border: 0;
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      background: white;
+      border: 1px dashed #d9b9c5;
+      border-radius: 20px;
+      padding: 45px 20px;
+      text-align: center;
+      color: #806d75;
+    }
+
+    /* ABOUT */
+    .aboutBox {
+      background: linear-gradient(135deg, #fff1f5, #fff9fb);
+      border: 1px solid #efd7e0;
+      border-radius: 30px;
+      padding: 50px;
+    }
+
+    /* CONTACT */
+    .contact {
+      text-align: center;
+      background: #8f3d5d;
+      color: white;
+      border-radius: 30px;
+      padding: 55px 25px;
+    }
+
+    .contact h2 {
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .contact p {
+      margin-bottom: 22px;
+      opacity: 0.9;
+    }
+
+    .contact .pill {
+      background: white;
+      color: #8f3d5d;
+      border-color: white;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #3c2930;
+      color: #eee;
+      text-align: center;
+      padding: 30px 15px;
+      margin-top: 30px;
+    }
+
+    .footer b {
+      color: #f0b7ca;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #3c2930;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 999px;
+      opacity: 0;
+      transition: 0.3s;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* MOBILE */
+    @media (max-width: 850px) {
+      .navlinks {
+        display: none;
+        position: absolute;
+        top: 75px;
+        right: 4%;
+        left: 4%;
+        background: white;
+        border: 1px solid #eadde2;
+        border-radius: 20px;
+        padding: 20px;
+        flex-direction: column;
+        align-items: stretch;
+        box-shadow: 0 15px 40px rgba(60, 30, 42, 0.12);
+      }
+
+      .navlinks.open {
+        display: flex;
+      }
+
+      .navlinks li {
+        text-align: center;
+      }
+
+      .menu {
+        display: block;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 35px;
+      }
+
+      .heroContent {
+        order: 2;
+      }
+
+      .heroLogo {
+        order: 1;
+        margin: auto;
+        max-width: 330px;
+      }
+
+      .actions {
+        justify-content: center;
+      }
+
+      .categories {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 550px) {
+      .section {
+        padding: 55px 0;
+      }
+
+      .categories {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .category {
+        padding: 20px 10px;
+      }
+
+      .products {
+        grid-template-columns: 1fr;
+      }
+
+      .productImage {
+        height: 280px;
+      }
+
+      .aboutBox {
+        padding: 30px 20px;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 40px;
+      }
+
+      .hero h1 {
+        font-size: 65px;
+      }
+
+      .sectionHead h2 {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    🌷 Fleuré — تفاصيل صغيرة تعمل فرحة كبيرة 🌷
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container nav">
+
+      <a href="#home">
+        <img
+          class="logo"
+          src="assets/fleure-logo.jpg"
+          alt="Fleuré"
+        >
+      </a>
+
+      <nav>
+        <ul class="navlinks" id="navLinks">
+          <li><a href="#home">الرئيسية</a></li>
+          <li><a href="#categories">الأقسام</a></li>
+          <li><a href="#products">المنتجات</a></li>
+          <li><a href="#about">عن Fleuré</a></li>
+          <li>
+            <a class="pill soft" href="#contact">
+              تواصلي معنا
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <button class="menu" onclick="toggleMenu()">
+        ☰
+      </button>
+
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main id="home">
+
+    <!-- HERO -->
+    <section class="container hero">
+
+      <div class="heroContent">
+
+        <span class="kicker">
+          HANDMADE • FLOWERS • GIFTS
+        </span>
+
+        <h1>Fleuré</h1>
+
+        <h2>
+          كل هدية ليها حكاية 🌸
+        </h2>
+
+        <p>
+          اكتشفي تشكيلتنا من الورد، منتجات العرايس،
+          البراويز الهاند ميد والهدايا المخصصة —
+          اختاري اللي يعجبك واطلبيه بسهولة على واتساب.
+        </p>
+
+        <div class="actions">
+          <a class="pill primary" href="#products">
+            اكتشفي المنتجات
+          </a>
+
+          <a class="pill soft" href="#categories">
+            تصفحي الأقسام
+          </a>
+        </div>
+
+      </div>
+
+      <img
+        class="heroLogo"
+        src="assets/fleure-logo.jpg"
+        alt="Fleuré"
+      >
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+    <section class="container section" id="categories">
+
+      <div class="sectionHead">
+
+        <span class="kicker">
+          SHOP BY CATEGORY
+        </span>
+
+        <h2>
+          اختاري القسم
+        </h2>
+
+        <p>
+          حاجات حلوة لكل مناسبة وكل شخص غالي
+        </p>
+
+      </div>
+
+      <div class="categories">
+
+        <a
+          class="category"
+          href="#products"
+          onclick="setCategory('عرايس')"
+        >
+          <div class="categoryIcon">👰</div>
+          <strong>منتجات العرايس</strong>
+          <span>تفاصيل للفرحة الكبيرة</span>
+        </a>
+
+        <a
+          class="category"
+          href="#products"
+          onclick="setCategory('ورد')"
+        >
+          <div class="categoryIcon">🌹</div>
+          <strong>الورد</strong>
+          <span>بوكيهات وتنسيقات</span>
+        </a>
+
+        <a
+          class="category"
+          href="#products"
+          onclick="setCategory('براويز')"
+        >
+          <div class="categoryIcon">🖼️</div>
+          <strong>براويز هاند ميد</strong>
+          <span>ذكرى تفضل موجودة</span>
+        </a>
+
+        <a
+          class="category"
+          href="#products"
+          onclick="setCategory('هدايا')"
+        >
+          <div class="categoryIcon">🎁</div>
+          <strong>هدايا</strong>
+          <span>اختيارات لكل مناسبة</span>
+        </a>
+
+        <a
+          class="category"
+          href="#products"
+          onclick="setCategory('غيره')"
+        >
+          <div class="categoryIcon">✨</div>
+          <strong>غيره</strong>
+          <span>حاجات مميزة ومتنوعة</span>
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- PRODUCTS -->
+    <section class="container section" id="products">
+
+      <div class="sectionHead">
+
+        <span class="kicker">
+          OUR COLLECTION
+        </span>
+
+        <h2>
+          منتجات Fleuré
+        </h2>
+
+        <p>
+          اختاري المنتج اللي عجبك وابعتيلنا طلبك على واتساب
+        </p>
+
+      </div>
+
+
+      <!-- FILTERS -->
+      <div class="filters">
+
+        <button
+          class="filter active"
+          data-cat="الكل"
+          onclick="setCategory('الكل')"
+        >
+          الكل
+        </button>
+
+        <button
+          class="filter"
+          data-cat="عرايس"
+          onclick="setCategory('عرايس')"
+        >
+          عرايس
+        </button>
+
+        <button
+          class="filter"
+          data-cat="ورد"
+          onclick="setCategory('ورد')"
+        >
+          ورد
+        </button>
+
+        <button
+          class="filter"
+          data-cat="براويز"
+          onclick="setCategory('براويز')"
+        >
+          براويز
+        </button>
+
+        <button
+          class="filter"
+          data-cat="هدايا"
+          onclick="setCategory('هدايا')"
+        >
+          هدايا
+        </button>
+
+        <button
+          class="filter"
+          data-cat="غيره"
+          onclick="setCategory('غيره')"
+        >
+          غيره
+        </button>
+
+      </div>
+
+
+      <!-- PRODUCTS GRID -->
+      <div class="products" id="productGrid">
+
+        <div class="empty">
+          جاري تحميل المنتجات 🌷
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+    <section class="container section" id="about">
+
+      <div class="aboutBox">
+
+        <div
+          class="sectionHead"
+          style="margin-bottom:0"
+        >
+
+          <span class="kicker">
+            ABOUT FLEURÉ
+          </span>
+
+          <h2>
+            مصنوع بحب 💗
+          </h2>
+
+          <p>
+            Fleuré مكان للتفاصيل الهاند ميد والهدايا
+            اللي بتخلي كل مناسبة ليها ذكرى خاصة.
+            كل منتج بيتجهز بعناية، وتقدري تتواصلي
+            معانا مباشرة على واتساب عشان نكمل التفاصيل.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CONTACT -->
+    <section class="container section" id="contact">
+
+      <div class="contact">
+
+        <h2>
+          جاهزة تختاري هديتك؟
+        </h2>
+
+        <p>
+          إحنا مستنيين رسالتك 🌷
+        </p>
+
+        <a
+          class="pill"
+          target="_blank"
+          href="https://wa.me/201558047386?text=مرحباً%20Fleuré%20🌷%20أريد%20الاستفسار%20عن%20منتج"
+        >
+          تواصلي على واتساب
+        </a>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <b>Fleuré</b>
+    — Handmade with love 🌸
+
+    <br>
+
+    جميع الحقوق محفوظة ©
+    <span id="year"></span>
+
+  </footer>
+
+
+  <!-- TOAST -->
+  <div id="toast" class="toast"></div>
+
+
+  <script>
+
+    /* =========================================
+       SUPABASE CONFIG
+       ========================================= */
+
+    const SUPABASE_URL =
+      "https://kjxisoftvxolyfjvhuip.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_0QDS7NkiWS5xC_zAv8DYsw_3kkowHJ0";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
+
+    /* =========================================
+       VARIABLES
+       ========================================= */
+
+    let allProducts = [];
+
+    let currentCategory = "الكل";
+
+    const whatsappNumber =
+      "201558047386";
+
+
+    /* =========================================
+       YEAR
+       ========================================= */
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+
+    /* =========================================
+       MOBILE MENU
+       ========================================= */
+
+    function toggleMenu() {
+
+      const nav =
+        document.getElementById("navLinks");
+
+      nav.classList.toggle("open");
+
+    }
+
+
+    /* =========================================
+       ESCAPE HTML
+       ========================================= */
+
+    function escapeHtml(value) {
+
+      if (value === null || value === undefined) {
+        return "";
+      }
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =========================================
+       TOAST
+       ========================================= */
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(function () {
+
+        toast.classList.remove("show");
+
+      }, 2500);
+
+    }
+
+
+    /* =========================================
+       CATEGORY
+       ========================================= */
+
+    function setCategory(category) {
+
+      currentCategory = category;
+
+      document
+        .querySelectorAll(".filter")
+        .forEach(function(button) {
+
+          button.classList.toggle(
+            "active",
+            button.dataset.cat === category
+          );
+
+        });
+
+      renderProducts();
+
+    }
+
+
+    /* =========================================
+       LOAD PRODUCTS FROM SUPABASE
+       ========================================= */
+
+    async function loadProducts() {
+
+      const grid =
+        document.getElementById("productGrid");
+
+      grid.innerHTML =
+        '<div class="empty">جاري تحميل المنتجات 🌷</div>';
+
+      try {
+
+        const result =
+          await supabaseClient
+            .from("products")
+            .select("*");
+
+        if (result.error) {
+
+          console.error(
+            "Supabase error:",
+            result.error
+          );
+
+          grid.innerHTML = `
+            <div class="empty">
+              حصلت مشكلة في تحميل المنتجات 😔
+              <br>
+              تأكدي إن جدول products موجود ومتاح.
+            </div>
+          `;
+
+          return;
+        }
+
+
+        allProducts =
+          result.data || [];
+
+
+        renderProducts();
+
+      } catch (error) {
+
+        console.error(error);
+
+        grid.innerHTML = `
+          <div class="empty">
+            حصل خطأ أثناء تحميل المنتجات 😔
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    /* =========================================
+       RENDER PRODUCTS
+       ========================================= */
+
+    function renderProducts() {
+
+      const grid =
+        document.getElementById("productGrid");
+
+
+      let products =
+        [...allProducts];
+
+
+      if (currentCategory !== "الكل") {
+
+        products =
+          products.filter(function(product) {
+
+            return product.category === currentCategory;
+
+          });
+
+      }
+
+
+      if (products.length === 0) {
+
+        grid.innerHTML = `
+          <div class="empty">
+            مفيش منتجات في القسم ده حالياً 🌷
+          </div>
+        `;
+
+        ret
