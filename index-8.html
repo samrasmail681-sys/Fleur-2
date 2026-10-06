@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Fleuré — ورد وهدايا وبراويز هاند ميد">
+  <title>Fleuré | Handmade with Love</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<div class="topbar">🌷 Fleuré — تفاصيل صغيرة تعمل فرحة كبيرة 🌷</div>
+
+<header class="header">
+  <div class="container nav">
+    <a href="#home">
+      <img class="logo" src="assets/fleure-logo.jpg" alt="Fleuré">
+    </a>
+
+    <nav>
+      <ul class="navlinks">
+        <li><a href="#home">الرئيسية</a></li>
+        <li><a href="#categories">الأقسام</a></li>
+        <li><a href="#products">المنتجات</a></li>
+        <li><a href="#about">عن Fleuré</a></li>
+        <li><a class="pill soft" href="#contact">تواصلي معنا</a></li>
+      </ul>
+    </nav>
+
+    <button class="menu" onclick="toggleMenu()" aria-label="فتح القائمة">☰</button>
+  </div>
+</header>
+
+<main id="home">
+
+<section class="container hero">
+  <div class="heroContent">
+    <span class="kicker">HANDMADE • FLOWERS • GIFTS</span>
+    <h1>Fleuré</h1>
+    <h2>كل هدية ليها حكاية 🌸</h2>
+    <p>
+      اكتشفي تشكيلتنا من الورد، منتجات العرايس،
+      البراويز الهاند ميد والهدايا المخصصة —
+      اختاري اللي يعجبك واطلبيه بسهولة على واتساب.
+    </p>
+
+    <div class="actions">
+      <a class="pill primary" href="#products">اكتشفي المنتجات</a>
+      <a class="pill soft" href="#categories">تصفحي الأقسام</a>
+    </div>
+  </div>
+
+  <img class="heroLogo" src="assets/fleure-logo.jpg" alt="Fleuré">
+</section>
+
+<section class="container section" id="categories">
+  <div class="sectionHead">
+    <span class="kicker">SHOP BY CATEGORY</span>
+    <h2>اختاري القسم</h2>
+    <p>حاجات حلوة لكل مناسبة وكل شخص غالي</p>
+  </div>
+
+  <div class="categories">
+    <a class="category" href="#products" onclick="setCategory('عرايس')">
+      <div class="categoryIcon">👰</div>
+      <strong>منتجات العرايس</strong>
+      <span>تفاصيل للفرحة الكبيرة</span>
+    </a>
+
+    <a class="category" href="#products" onclick="setCategory('ورد')">
+      <div class="categoryIcon">🌹</div>
+      <strong>الورد</strong>
+      <span>بوكيهات وتنسيقات</span>
+    </a>
+
+    <a class="category" href="#products" onclick="setCategory('براويز')">
+      <div class="categoryIcon">🖼️</div>
+      <strong>براويز هاند ميد</strong>
+      <span>ذكرى تفضل موجودة</span>
+    </a>
+
+    <a class="category" href="#products" onclick="setCategory('هدايا')">
+      <div class="categoryIcon">🎁</div>
+      <strong>هدايا</strong>
+      <span>اختيارات لكل مناسبة</span>
+    </a>
+
+    <a class="category" href="#products" onclick="setCategory('غيره')">
+      <div class="categoryIcon">✨</div>
+      <strong>غيره</strong>
+      <span>حاجات مميزة ومتنوعة</span>
+    </a>
+  </div>
+</section>
+
+<section class="container section" id="products">
+  <div class="sectionHead">
+    <span class="kicker">OUR COLLECTION</span>
+    <h2>منتجات Fleuré</h2>
+    <p>اختاري المنتج اللي عجبك وابعتيلنا طلبك على واتساب</p>
+  </div>
+
+  <div class="filters">
+    <button class="filter active" data-cat="الكل" onclick="setCategory('الكل')">الكل</button>
+    <button class="filter" data-cat="عرايس" onclick="setCategory('عرايس')">عرايس</button>
+    <button class="filter" data-cat="ورد" onclick="setCategory('ورد')">ورد</button>
+    <button class="filter" data-cat="براويز" onclick="setCategory('براويز')">براويز</button>
+    <button class="filter" data-cat="هدايا" onclick="setCategory('هدايا')">هدايا</button>
+    <button class="filter" data-cat="غيره" onclick="setCategory('غيره')">غيره</button>
+  </div>
+
+  <div class="products" id="productGrid">
+    <div class="empty">جاري تحميل المنتجات 🌷</div>
+  </div>
+</section>
+
+<section class="container section" id="about">
+  <div class="aboutBox">
+    <div class="sectionHead" style="margin-bottom:0">
+      <span class="kicker">ABOUT FLEURÉ</span>
+      <h2>مصنوع بحب 💗</h2>
+      <p>
+        Fleuré مكان للتفاصيل الهاند ميد والهدايا
+        اللي بتخلي كل مناسبة ليها ذكرى خاصة.
+        كل منتج بيتجهز بعناية، وتقدري تتواصلي
+        معانا مباشرة على واتساب عشان نكمل التفاصيل.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="container section" id="contact">
+  <div class="contact">
+    <h2>جاهزة تختاري هديتك؟</h2>
+    <p>إحنا مستنيين رسالتك 🌷</p>
+
+    <a
+      class="pill"
+      target="_blank"
+      rel="noopener"
+      href="https://wa.me/201558047386?text=مرحباً%20Fleuré%20🌷%20أريد%20الاستفسار%20عن%20منتج"
+    >
+      تواصلي على واتساب
+    </a>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <p>© 2026 Fleuré — Handmade with Love 🌷</p>
+</footer>
+
+<script>
+const SUPABASE_URL =
+  "https://kjxisoftvxolyfjvhuip.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_0QDS7NkiWS5xC_zAv8DYsw_3kkowHJ0";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+function toggleMenu() {
+  const nav = document.querySelector(".navlinks");
+  if (nav) nav.classList.toggle("open");
+}
+
+let currentCategory = "الكل";
+
+function setCategory(category) {
+  currentCategory = category;
+
+  document.querySelectorAll(".filter").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.cat === category
+    );
+  });
+
+  loadProducts();
+}
+
+async function loadProducts() {
+  const grid = document.getElementById("productGrid");
+  if (!grid) return;
+
+  grid.innerHTML = `
+    <div class="empty">جاري تحميل المنتجات 🌷</div>
+  `;
+
+  try {
+    const { data, error } =
+      await supabaseClient
+        .from("products")
+        .select("*");
+
+    if (error) {
+      console.error(error);
+      grid.innerHTML = `
+        <div class="empty">
+          المنتجات هتظهر هنا قريبًا 🌷
+        </div>
+      `;
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      grid.innerHTML = `
+        <div class="empty">
+          لا توجد منتجات حاليًا 🌷
+        </div>
+      `;
+      return;
+    }
+
+    const products =
+      currentCategory === "الكل"
+        ? data
+        : data.filter(product =>
+            product.category === currentCategory
+          );
+
+    if (products.length === 0) {
+      grid.innerHTML = `
+        <div class="empty">
+          مفيش منتجات في القسم ده حاليًا 🌷
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = products.map(product => {
+      const name = product.name || "منتج Fleuré";
+      const description = product.description || "";
+      const price = product.price
+        ? `${product.price} جنيه`
+        : "";
+
+      const image =
+        product.image_url ||
+        product.image ||
+        "assets/fleure-logo.jpg";
+
+      const whatsappText =
+        `مرحباً Fleuré 🌷 أريد الاستفسار عن ${name}`;
+
+      const whatsapp =
+        `https://wa.me/201558047386?text=${
+          encodeURIComponent(whatsappText)
+        }`;
+
+      return `
+        <article class="product">
+          <img
+            src="${image}"
+            alt="${name}"
+            loading="lazy"
+          >
+
+          <div class="productContent">
+            <h3>${name}</h3>
+
+            ${
+              description
+                ? `<p>${description}</p>`
+                : ""
+            }
+
+            ${
+              price
+                ? `<strong>${price}</strong>`
+                : ""
+            }
+
+            <a
+              class="pill primary"
+              target="_blank"
+              rel="noopener"
+              href="${whatsapp}"
+            >
+              اطلبي على واتساب
+            </a>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+  } catch (err) {
+    console.error(err);
+
+    grid.innerHTML = `
+      <div class="empty">
+        حصلت مشكلة في تحميل المنتجات 🌷
+      </div>
+    `;
+  }
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  loadProducts
+);
+</script>
+
+</body>
+</html>
