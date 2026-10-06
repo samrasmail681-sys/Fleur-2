@@ -1062,14 +1062,807 @@
           });
 
       }
+ 
+if (products.length === 0) {
+
+  grid.innerHTML = `
+    <div class="empty">
+      مفيش منتجات في القسم ده حالياً 🌷
+    </div>
+  `;
+
+  return;
+}
 
 
-      if (products.length === 0) {
+grid.innerHTML = products.map(function(product) {
 
-        grid.innerHTML = `
-          <div class="empty">
-            مفيش منتجات في القسم ده حالياً 🌷
+  const name =
+    escapeHtml(product.name);
+
+  const price =
+    escapeHtml(product.price);
+
+  const description =
+    escapeHtml(product.description);
+
+  const category =
+    escapeHtml(product.category);
+
+  const image =
+    product.image_url
+      ? escapeHtml(product.image_url)
+      : "https://via.placeholder.com/600x500?text=Fleure";
+
+  const message =
+    encodeURIComponent(
+      "مرحباً Fleuré 🌷 أريد الاستفسار عن منتج: " +
+      product.name
+    );
+
+  return `
+    <article class="product">
+
+      <img
+        class="productImage"
+        src="${image}"
+        alt="${name}"
+      >
+
+      <div class="productBody">
+
+        <span class="productCategory">
+          ${category}
+        </span>
+
+        <h3>
+          ${name}
+        </h3>
+
+        <p class="productDescription">
+          ${description}
+        </p>
+
+        <div class="productBottom">
+
+          <div class="price">
+            ${price} جنيه
           </div>
-        `;
 
-        ret
+          <a
+            class="whatsapp"
+            target="_blank"
+            href="https://wa.me/${whatsappNumber}?text=${message}"
+          >
+            واتساب
+          </a>
+
+        </div>
+
+      </div>
+
+    </article>
+  `;
+
+}).join("");
+
+}
+
+
+/* =========================================
+   ADMIN PANEL
+   ========================================= */
+
+function openAdmin() {
+
+  let panel =
+    document.getElementById("adminPanel");
+
+  if (panel) {
+
+    panel.style.display = "flex";
+
+    return;
+
+  }
+
+
+  panel = document.createElement("div");
+
+  panel.id = "adminPanel";
+
+  panel.innerHTML = `
+
+    <div class="adminBox">
+
+      <button
+        class="adminClose"
+        onclick="closeAdmin()"
+      >
+        ✕
+      </button>
+
+      <div id="adminContent">
+
+        <h2>لوحة إدارة Fleuré 🌷</h2>
+
+        <p>
+          تسجيل الدخول للإدارة
+        </p>
+
+        <input
+          id="adminEmail"
+          type="email"
+          placeholder="الإيميل"
+        >
+
+        <input
+          id="adminPassword"
+          type="password"
+          placeholder="كلمة المرور"
+        >
+
+        <button
+          class="adminButton"
+          onclick="adminLogin()"
+        >
+          دخول
+        </button>
+
+        <div
+          id="adminMessage"
+          class="adminMessage"
+        ></div>
+
+      </div>
+
+    </div>
+
+  `;
+
+  document.body.appendChild(panel);
+
+}
+
+
+function closeAdmin() {
+
+  const panel =
+    document.getElementById("adminPanel");
+
+  if (panel) {
+
+    panel.style.display = "none";
+
+  }
+
+}
+
+
+/* =========================================
+   ADMIN LOGIN
+   ========================================= */
+
+async function adminLogin() {
+
+  const email =
+    document.getElementById("adminEmail").value.trim();
+
+  const password =
+    document.getElementById("adminPassword").value;
+
+  const message =
+    document.getElementById("adminMessage");
+
+
+  if (!email || !password) {
+
+    message.textContent =
+      "اكتب الإيميل وكلمة المرور.";
+
+    return;
+
+  }
+
+
+  message.textContent =
+    "جاري تسجيل الدخول...";
+
+
+  const result =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+
+  if (result.error) {
+
+    console.error(result.error);
+
+    message.textContent =
+      "الإيميل أو كلمة المرور غير صحيحة ❌";
+
+    return;
+
+  }
+
+
+  showAdminForm();
+
+}
+
+
+/* =========================================
+   ADMIN FORM
+   ========================================= */
+
+function showAdminForm() {
+
+  const content =
+    document.getElementById("adminContent");
+
+
+  content.innerHTML = `
+
+    <h2>
+      لوحة Fleuré 🌷
+    </h2>
+
+    <p>
+      إضافة منتج جديد
+    </p>
+
+    <input
+      id="productName"
+      type="text"
+      placeholder="اسم المنتج"
+    >
+
+    <input
+      id="productPrice"
+      type="text"
+      placeholder="السعر"
+    >
+
+    <textarea
+      id="productDescription"
+      placeholder="وصف المنتج"
+    ></textarea>
+
+    <select id="productCategory">
+
+      <option value="عرايس">
+        عرايس
+      </option>
+
+      <option value="ورد">
+        ورد
+      </option>
+
+      <option value="براويز">
+        براويز
+      </option>
+
+      <option value="هدايا">
+        هدايا
+      </option>
+
+      <option value="غيره">
+        غيره
+      </option>
+
+    </select>
+
+    <input
+      id="productImage"
+      type="file"
+      accept="image/*"
+    >
+
+    <button
+      class="adminButton"
+      onclick="addProduct()"
+    >
+      إضافة المنتج 🌷
+    </button>
+
+    <button
+      class="adminLogout"
+      onclick="adminLogout()"
+    >
+      تسجيل الخروج
+    </button>
+
+    <div
+      id="adminMessage"
+      class="adminMessage"
+    ></div>
+
+  `;
+
+}
+
+
+/* =========================================
+   ADD PRODUCT
+   ========================================= */
+
+async function addProduct() {
+
+  const name =
+    document.getElementById("productName").value.trim();
+
+  const price =
+    document.getElementById("productPrice").value.trim();
+
+  const description =
+    document.getElementById("productDescription").value.trim();
+
+  const category =
+    document.getElementById("productCategory").value;
+
+  const imageInput =
+    document.getElementById("productImage");
+
+  const message =
+    document.getElementById("adminMessage");
+
+
+  if (!name || !price || !category) {
+
+    message.textContent =
+      "اكتب اسم المنتج والسعر واختار القسم.";
+
+    return;
+
+  }
+
+
+  if (!imageInput.files.length) {
+
+    message.textContent =
+      "اختار صورة للمنتج.";
+
+    return;
+
+  }
+
+
+  const file =
+    imageInput.files[0];
+
+
+  message.textContent =
+    "جاري رفع الصورة وإضافة المنتج...";
+
+
+  try {
+
+    const fileName =
+      Date.now() +
+      "-" +
+      file.name.replace(/\s+/g, "-");
+
+
+    const uploadResult =
+      await supabaseClient
+        .storage
+        .from("products-images")
+        .upload(
+          fileName,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false
+          }
+        );
+
+
+    if (uploadResult.error) {
+
+      console.error(uploadResult.error);
+
+      message.textContent =
+        "حصلت مشكلة أثناء رفع الصورة ❌";
+
+      return;
+
+    }
+
+
+    const imagePath =
+      uploadResult.data.path;
+
+
+    const publicResult =
+      supabaseClient
+        .storage
+        .from("products-images")
+        .getPublicUrl(imagePath);
+
+
+    const imageUrl =
+      publicResult.data.publicUrl;
+
+
+    const insertResult =
+      await supabaseClient
+        .from("products")
+        .insert([
+          {
+            name: name,
+            price: price,
+            description: description,
+            category: category,
+            image_url: imageUrl,
+            image_path: imagePath,
+            active: true
+          }
+        ]);
+
+
+    if (insertResult.error) {
+
+      console.error(insertResult.error);
+
+      message.textContent =
+        "الصورة اترفعت لكن المنتج ما اتضافش ❌";
+
+      return;
+
+    }
+
+
+    message.textContent =
+      "تم إضافة المنتج بنجاح ✅";
+
+
+    document.getElementById("productName").value = "";
+    document.getElementById("productPrice").value = "";
+    document.getElementById("productDescription").value = "";
+    document.getElementById("productImage").value = "";
+
+
+    await loadProducts();
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "حصل خطأ غير متوقع ❌";
+
+  }
+
+}
+
+
+/* =========================================
+   LOGOUT
+   ========================================= */
+
+async function adminLogout() {
+
+  await supabaseClient.auth.signOut();
+
+  showLoginForm();
+
+}
+
+
+function showLoginForm() {
+
+  const content =
+    document.getElementById("adminContent");
+
+  if (!content) return;
+
+
+  content.innerHTML = `
+
+    <h2>
+      لوحة إدارة Fleuré 🌷
+    </h2>
+
+    <p>
+      تسجيل الدخول للإدارة
+    </p>
+
+    <input
+      id="adminEmail"
+      type="email"
+      placeholder="الإيميل"
+    >
+
+    <input
+      id="adminPassword"
+      type="password"
+      placeholder="كلمة المرور"
+    >
+
+    <button
+      class="adminButton"
+      onclick="adminLogin()"
+    >
+      دخول
+    </button>
+
+    <div
+      id="adminMessage"
+      class="adminMessage"
+    ></div>
+
+  `;
+
+}
+
+
+/* =========================================
+   CHECK ADMIN SESSION
+   ========================================= */
+
+async function checkAdminAccess() {
+
+  const result =
+    await supabaseClient.auth.getSession();
+
+  if (
+    result.data &&
+    result.data.session
+  ) {
+
+    showAdminForm();
+
+  }
+
+}
+
+
+/* =========================================
+   ADMIN BUTTON
+   ========================================= */
+
+function createAdminButton() {
+
+  const button =
+    document.createElement("button");
+
+  button.className =
+    "adminOpenButton";
+
+  button.textContent =
+    "🔐 إدارة الموقع";
+
+  button.onclick =
+    openAdmin;
+
+  document.body.appendChild(button);
+
+}
+
+
+/* =========================================
+   ADMIN CSS
+   ========================================= */
+
+const adminStyle =
+  document.createElement("style");
+
+adminStyle.textContent = `
+
+  .adminOpenButton {
+
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9998;
+
+    background: #8f3d5d;
+    color: white;
+
+    border: none;
+    border-radius: 999px;
+
+    padding: 12px 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow:
+      0 8px 25px
+      rgba(0,0,0,0.15);
+
+  }
+
+
+  #adminPanel {
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 10000;
+
+    background: rgba(30,20,25,0.65);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+  }
+
+
+  .adminBox {
+
+    width: min(500px, 100%);
+
+    max-height: 90vh;
+    overflow-y: auto;
+
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 30px;
+
+    position: relative;
+
+    box-shadow:
+      0 25px 80px
+      rgba(0,0,0,0.25);
+
+  }
+
+
+  .adminBox h2 {
+
+    color: #8f3d5d;
+
+    margin-bottom: 10px;
+
+  }
+
+
+  .adminBox p {
+
+    color: #777;
+
+    margin-bottom: 20px;
+
+  }
+
+
+  .adminBox input,
+  .adminBox textarea,
+  .adminBox select {
+
+    width: 100%;
+
+    padding: 12px 14px;
+
+    margin-bottom: 12px;
+
+    border: 1px solid #e2cbd4;
+
+    border-radius: 12px;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+  }
+
+
+  .adminBox textarea {
+
+    min-height: 100px;
+
+    resize: vertical;
+
+  }
+
+
+  .adminButton {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #8f3d5d;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-top: 5px;
+
+  }
+
+
+  .adminLogout {
+
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 12px;
+
+    background: #f7f7f7;
+
+    color: #555;
+
+    cursor: pointer;
+
+    margin-top: 10px;
+
+  }
+
+
+  .adminClose {
+
+    position: absolute;
+
+    top: 12px;
+    left: 15px;
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f7e8ee;
+
+    color: #8f3d5d;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+  }
+
+
+  .adminMessage {
+
+    text-align: center;
+
+    margin-top: 15px;
+
+    color: #8f3d5d;
+
+    font-weight: bold;
+
+  }
+
+`;
+
+
+document.head.appendChild(adminStyle);
+
+
+/* =========================================
+   START
+   ========================================= */
+
+createAdminButton();
+
+loadProducts();
+
+checkAdminAccess();
+
+  </script>
+
+</body>
+</html>
